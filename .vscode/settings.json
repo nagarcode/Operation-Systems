@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "cstdio": "c",
+        "__config": "cpp",
+        "locale": "cpp"
+    }
+}
