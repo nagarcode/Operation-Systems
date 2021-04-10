@@ -192,7 +192,7 @@ clockintr()
     }
     release(&p->lock);
   }
-  //end add
+  // end add
   wakeup(&ticks);
   release(&tickslock);
 }

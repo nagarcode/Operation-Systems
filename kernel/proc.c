@@ -153,6 +153,14 @@ found:
   p->context.ra = (uint64)forkret;
   p->context.sp = p->kstack + PGSIZE;
   p->traceMask = 0; //initially no sys calls are traced
+
+  int performance[PERF_SIZE]; 
+
+  for(int i=0;i<PERF_SIZE;i++)
+    performance[i]=0; 
+
+  p->performance = (struct perf*)performance;
+  
   acquire(&tickslock);
   p->performance->ctime = ticks;
   release(&tickslock);

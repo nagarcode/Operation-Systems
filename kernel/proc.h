@@ -120,7 +120,7 @@ struct proc
   char name[16];               // Process name (debugging)
   struct perf *performance;    // Time spent in each state
 };
-
+#define PERF_SIZE 6
 struct perf
 {
   int ctime;
