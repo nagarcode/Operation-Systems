@@ -154,16 +154,16 @@ found:
   p->context.sp = p->kstack + PGSIZE;
   p->traceMask = 0; //initially no sys calls are traced
 
-  int performance[PERF_SIZE]; 
+  // int performance[PERF_SIZE]; 
 
-  for(int i=0;i<PERF_SIZE;i++)
-    performance[i]=0; 
+  // for(int i=0;i<PERF_SIZE;i++)
+  //   performance[i]=0; 
 
-  p->performance = (struct perf*)performance;
+  // p->performance = (struct perf*)performance;
   
-  acquire(&tickslock);
-  p->performance->ctime = ticks;
-  release(&tickslock);
+  // acquire(&tickslock);
+  // p->performance->ctime = ticks;
+  // release(&tickslock);
   return p;
 }
 
@@ -371,9 +371,9 @@ void exit(int status)
 {
   struct proc *p = myproc();
   //start add
-  acquire(&tickslock);
-  p->performance->ttime = ticks;
-  release(&tickslock);
+  // acquire(&tickslock);
+  // p->performance->ttime = ticks;
+  // release(&tickslock);
   //end add
   if (p == initproc)
     panic("init exiting");
