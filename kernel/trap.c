@@ -165,6 +165,33 @@ clockintr()
   acquire(&tickslock);
   ticks++;
   //start add UNUSED, USED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE
+  struct proc *p;
+  for(p = getProc(); p < &getProc()[NPROC]; p++){
+    acquire(&p->lock);
+
+    enum procstate state = p->state;
+    switch (state)
+    {
+      case UNUSED:
+        break;
+      case USED:
+        break;
+      case SLEEPING:
+        p->stime += 1;
+        break;
+      case RUNNABLE:
+        p->retime += 1;
+        break;
+      case RUNNING:
+        p->runtime += 1;
+        break;
+      case ZOMBIE:   
+        break; 
+      default:
+        break;
+    }
+    release(&p->lock);
+  }
   // end add
   wakeup(&ticks);
   release(&tickslock);

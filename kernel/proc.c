@@ -154,16 +154,15 @@ found:
   p->context.sp = p->kstack + PGSIZE;
   p->traceMask = 0; //initially no sys calls are traced
 
-  // int performance[PERF_SIZE]; 
+  p->retime = 0;
+  p->runtime = 0;
+  p->stime = 0;
+  p->ttime = -1;
+  p->average_bursttime = QUANTUM;
 
-  // for(int i=0;i<PERF_SIZE;i++)
-  //   performance[i]=0; 
-
-  // p->performance = (struct perf*)performance;
-  
-  // acquire(&tickslock);
-  // p->performance->ctime = ticks;
-  // release(&tickslock);
+  acquire(&tickslock);
+  p->ctime = ticks;
+  release(&tickslock);
   return p;
 }
 
@@ -371,9 +370,9 @@ void exit(int status)
 {
   struct proc *p = myproc();
   //start add
-  // acquire(&tickslock);
-  // p->performance->ttime = ticks;
-  // release(&tickslock);
+  acquire(&tickslock);
+  p->ttime = ticks;
+  release(&tickslock);
   //end add
   if (p == initproc)
     panic("init exiting");
@@ -496,8 +495,12 @@ void scheduler(void)
         // before jumping back to us.
         p->state = RUNNING;
         c->proc = p;
-        swtch(&c->context, &p->context);
+        int old_runtime = p->runtime;
 
+        swtch(&c->context, &p->context);
+        int curr_burst = p->runtime - old_runtime;
+        int avg = p->average_bursttime;
+        p->average_bursttime = (ALPHA*curr_burst) + (((100-ALPHA)*avg)/100);
         // Process is done running for now.
         // It should have changed its p->state before coming back.
         c->proc = 0;
