@@ -105,6 +105,12 @@ struct proc
   int xstate;           // Exit status to be returned to parent's wait
   int pid;              // Process ID
   int traceMask;        // which system calls should be traced
+  int ctime;
+  int ttime;
+  int stime;
+  int retime;
+  int runtime;
+  int average_bursttime;
 
   // proc_tree_lock must be held when using this:
   struct proc *parent; // Parent process
@@ -119,12 +125,6 @@ struct proc
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
   //struct perf *performance;    // Time spent in each state
-  int ctime;
-  int ttime;
-  int stime;
-  int retime;
-  int runtime;
-  int average_bursttime;
 };
 
 #define PERF_SIZE 6

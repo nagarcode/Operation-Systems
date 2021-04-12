@@ -647,6 +647,7 @@ int wait_stat(int* status, struct perf *performance){
     struct proc *np;
   int havekids, pid;
   struct proc *p = myproc();
+  //performance = (struct perf*)malloc(sizeof(performance));
 
   acquire(&wait_lock);
 
@@ -658,6 +659,7 @@ int wait_stat(int* status, struct perf *performance){
     {
       if (np->parent == p)
       {
+        printf("[PARENT proc.c]: found a child\n");
         // make sure the child isn't still in exit() or swtch().
         acquire(&np->lock);
 
@@ -665,12 +667,19 @@ int wait_stat(int* status, struct perf *performance){
         if (np->state == ZOMBIE)
         {
           // Found one.
+          printf("[PARENT proc.c]: copying performance values\n");
           pid = np->pid;
-          performance->ctime = np->ctime;
+          printf("[PARENT proc.c]: pid = %d\n", pid);
+          performance->ctime = np->ctime;//FAILS HERE
+          printf("[PARENT proc.c]:ctime = %d\n", performance->ctime);
           performance->ttime = np->ttime;
           performance->retime = np->retime;
           performance->rutime = np->runtime;
           performance->average_bursttime = np->average_bursttime;
+          printf("[PARENT proc.c]: finished copying\n");
+          
+          // printf("[PARENT]: \n\tctime: %d\n\tttime: \n\trun: %d\n\trunnable: %d\n\tsleep: %d\n\tavg burst: %d\n",
+          //  performance->ctime,performance->ttime,performance->rutime,performance->retime,performance->stime,performance->average_bursttime);
 
           if (status != 0 && copyout(p->pagetable, (uint64)status, (char *)&np->xstate,
                                    sizeof(np->xstate)) < 0)
