@@ -8,6 +8,15 @@
 #include "proc.h"
 
 uint64
+sys_wait_stat(void){
+  int* status ;
+  struct perf* performance;
+  argint(0, (int*)&status);
+  argint(1, (int*)&performance);
+  return wait_stat((int*)status, performance);
+}
+
+uint64
 sys_trace(void)
 {
   int mask;

@@ -127,4 +127,15 @@ struct proc
   int average_bursttime;
 };
 
+#define PERF_SIZE 6
+struct perf
+{
+  int ctime;
+  int ttime;
+  int stime;
+  int retime;
+  int rutime;
+  int average_bursttime;
+};
+
 struct proc *getProc();
